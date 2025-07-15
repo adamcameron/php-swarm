@@ -1,0 +1,76 @@
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:80"
+
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - ../public:/usr/share/nginx/html/
+
+  php:
+    container_name: php
+    build:
+      context: php
+      dockerfile: Dockerfile.dev
+
+    env_file:
+      - envVars.public
+      - php/envVars.public
+      - php/envVars.dev.public
+
+    ports:
+      - "9000:9000"
+
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - ..:/var/www
+
+    secrets:
+      - app_secrets
+      - mariadb_password
+
+  mariadb:
+    container_name: db
+    build:
+      context: mariadb
+      dockerfile: Dockerfile
+
+    env_file:
+      - envVars.public
+
+    ports:
+      - "3380:3306"
+
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - mariadb-data:/var/lib/mariadb
+
+    secrets:
+      - mariadb_password
+      - mariadb_root_password
+
+    environment:
+      MARIADB_PASSWORD_FILE: /run/secrets/mariadb_password
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
+
+volumes:
+  mariadb-data:
+
+secrets:
+  app_secrets:
+    file: php/appEnvVars.private
+  mariadb_password:
+    file: mariadb/mariadb_password_file.private
+  mariadb_root_password:
+    file: mariadb/mariadb_root_password_file.private

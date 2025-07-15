@@ -1,0 +1,5 @@
+# DO NOT put anything in here that should not be public (eg: passwords, api keys, etc)
+MARIADB_HOST=host.docker.internal
+MARIADB_PORT=3380
+MARIADB_DATABASE=db1
+MARIADB_USER=user1

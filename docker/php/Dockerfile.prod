@@ -1,0 +1,21 @@
+FROM adamcameron/php-swarm-base
+
+WORKDIR /var/www
+
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+COPY docker/php/usr/local/etc/php/conf.d/php-swarm.ini /usr/local/etc/php/conf.d/php-swarm.ini
+
+# need to use 777 as both php-fpm and php-cli will write to these directories
+RUN mkdir -p /var/cache/symfony/prod && chown www-data:www-data /var/cache/symfony/prod && chmod 777 /var/cache/symfony/prod
+
+COPY .env .env
+COPY .env.prod .env.prod
+COPY config config
+COPY src src
+COPY public public
+COPY templates templates
+
+COPY composer.json composer.lock .
+RUN composer install --no-interaction --no-ansi --no-progress --prefer-dist --no-dev
+
+EXPOSE 9000
