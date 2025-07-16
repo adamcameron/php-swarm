@@ -9,6 +9,8 @@ RUN echo "alias cls='clear; printf \"\033[3J\"'" >> ~/.bashrc
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 COPY docker/php/usr/local/etc/php/conf.d/error_reporting.ini /usr/local/etc/php/conf.d/error_reporting.ini
+COPY docker/php/usr/local/etc/php/conf.d/php-swarm.ini /usr/local/etc/php/conf.d/php-swarm.ini
+COPY docker/php/usr/local/etc/php/conf.d/redis.ini /usr/local/etc/php/conf.d/redis.ini
 
 RUN apt-get install -y libicu-dev && docker-php-ext-configure intl && docker-php-ext-install intl
 
@@ -21,6 +23,8 @@ RUN [ \
 RUN docker-php-ext-configure zip && docker-php-ext-install zip
 RUN docker-php-ext-configure pdo_mysql && docker-php-ext-install pdo_mysql
 RUN docker-php-ext-configure opcache && docker-php-ext-install opcache
+
+RUN pecl install redis && docker-php-ext-enable redis
 
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
 RUN ["apt-get", "install", "-y", "symfony-cli"]

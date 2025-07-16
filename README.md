@@ -64,7 +64,7 @@ This presupposes appropriate Nginx and DB servers are already running
 # only need to do this once or if Dockerfile.base changes
 docker build \
   -f docker/php/Dockerfile.base \
-  -t adamcameron/php-swarm-base:x.y \ # where x.y is the actual version, e.g. 0.6 \
+  -t adamcameron/php-swarm-base:x.y \ # where x.y is the actual version, e.g. 3.0 \
   -t adamcameron/php-swarm-base:latest \
   .
 docker push adamcameron/php-swarm-base:x.y 
@@ -80,41 +80,6 @@ docker build \
 docker push adamcameron/php-swarm:x.y
 docker push adamcameron/php-swarm:latest
 ```
-
-## Running the prod container via Docker Run
-
-```bash
-docker run \
-    --name php \
-    --restart unless-stopped \
-    -p 9000:9000 \
-    --env-file docker/envVars.public \
-    --env-file docker/php/envVars.public \
-    --env-file docker/php/envVars.prod.public \
-    --env-file docker/envVars.private \
-    --env-file docker/php/envVars.private \
-    --add-host=host.docker.internal:host-gateway \
-    --detach \
-    -it \
-    adamcameron/php-swarm:latest
-    
-# verify stability
-docker container ls --format "table {{.Names}}\t{{.Status}}" | grep php
-php       Up 2 minutes (healthy)
-
-# the tests are deployed in the prod container, so test something else:
-curl -s -o /dev/null -w "%{http_code}\n" http://php-swarm.local:8080/
-200
-
-docker exec php bin/console about | grep -B 1 -A 2 Kernel
- -------------------- -------------------------------------------
-  Kernel
- -------------------- -------------------------------------------
-  Type                 App\Kernel
-  Environment          prod
-  Debug                false
-```
-
 ## Running the prod container via Docker Swarm
 
 ```bash
@@ -161,3 +126,5 @@ docker exec php.1.lkrg5g45mb3njmi180gupyknh  bin/console about | grep -B 1 -A 2 
 0.1 - Baseline setup copied from php8-on-k8s, with Kubernetes stuff removed and Docker Swarm stuff for dev env added
 
 0.2 - Implementation using docker secrets and docker swarm
+
+0.3 - Adding shared sessions via Redis

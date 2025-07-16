@@ -64,8 +64,31 @@ services:
       MARIADB_PASSWORD_FILE: /run/secrets/mariadb_password
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root_password
 
+  redis:
+    container_name: redis
+
+    image: redis:8.0-bookworm
+
+    ports:
+      - "6379:6379"
+
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - redis-data:/data
+
+    command: ["redis-server", "--appendonly", "yes"]
+
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
 volumes:
   mariadb-data:
+  redis-data:
 
 secrets:
   app_secrets:
