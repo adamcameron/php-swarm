@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class GreeterTest extends TestCase
 {
     #[TestDox('It greets formally by default')]
-    public function testFormalGreeting()
+    public function testFormalGreeting(): void
     {
         $name = 'Zachary';
         $expectedGreeting = "Hello, $name";
@@ -24,7 +24,7 @@ class GreeterTest extends TestCase
     }
 
     #[TestDox('It greets informally')]
-    public function testInformalGreeting()
+    public function testInformalGreeting(): void
     {
         $name = 'Zachary';
         $expectedGreeting = "Hi, $name";

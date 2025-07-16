@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class PhpTest extends TestCase
 {
     #[TestDox('It has the expected PHP version')]
-    public function testPhpVersion()
+    public function testPhpVersion(): void
     {
         $expectedPhpVersion = '8.4';
         $actualPhpVersion = phpversion();

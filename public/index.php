@@ -1,10 +1,11 @@
 <?php
 
 use App\Kernel;
+use App\Service\EnvironmentService;
 
-$app_dir = dirname(__DIR__);
-require_once $app_dir . '/vendor/autoload_runtime.php';
-require_once $app_dir . '/load_app_secrets.php';
+require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
+
+EnvironmentService::load();
 
 return function (array $context) {
     return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);

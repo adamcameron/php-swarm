@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class ProcTest extends TestCase
 {
     #[TestDox('It has a proc called sleep_and_return which idles for n seconds before returning its parameter value')]
-    public function testSleepAndReturnProc()
+    public function testSleepAndReturnProc(): void
     {
         $sleepDuration = 2;
 

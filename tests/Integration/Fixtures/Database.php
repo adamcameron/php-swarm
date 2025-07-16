@@ -51,27 +51,4 @@ class Database
             $config
         );
     }
-
-    public static function getPrimaryReadReplicaConnection(): PrimaryReadReplicaConnection | Connection
-    {
-        $parameters = self::getConnectionParameters();
-        return DriverManager::getConnection([
-            'wrapperClass' => PrimaryReadReplicaConnection::class,
-            'driver' => 'pdo_mysql',
-            'primary' => [
-                'host' => $parameters->host,
-                'port' => $parameters->port,
-                'user' => $parameters->username,
-                'password' => $parameters->password,
-                'dbname' => $parameters->database
-            ],
-            'replica' => [[
-                'host' => $parameters->host,
-                'port' => $parameters->port,
-                'user' => $parameters->username,
-                'password' => $parameters->password,
-                'dbname' => $parameters->database
-            ]]
-        ]);
-    }
 }

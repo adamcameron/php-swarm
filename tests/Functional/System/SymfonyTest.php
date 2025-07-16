@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SymfonyTest extends WebTestCase
 {
     #[TestDox('It serves the home page')]
-    public function testSymfonyWelcomeScreenDisplays()
+    public function testSymfonyWelcomeScreenDisplays(): void
     {
         $client = static::createClient();
         $client->request('GET', '/');

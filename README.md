@@ -81,7 +81,7 @@ docker push adamcameron/php-swarm:x.y
 docker push adamcameron/php-swarm:latest
 ```
 
-## Running the prod container via Docker
+## Running the prod container via Docker Run
 
 ```bash
 docker run \
@@ -121,6 +121,9 @@ docker exec php bin/console about | grep -B 1 -A 2 Kernel
 # only needed once to start-up the swarm
 docker swarm init --advertise-addr 127.0.0.1
 
+docker secret create mariadb_password docker/mariadb/mariadb_password_file.private
+docker secret create app_secrets docker/php/appEnvVars.private
+
 docker service create \
     --name php \
     --replicas 3 \
@@ -128,9 +131,9 @@ docker service create \
     --env-file docker/envVars.public \
     --env-file docker/php/envVars.public \
     --env-file docker/php/envVars.prod.public \
-    --env-file docker/envVars.private \
-    --env-file docker/php/envVars.private \
     --host host.docker.internal:host-gateway \
+    --secret app_secrets \
+    --secret mariadb_password \
     adamcameron/php-swarm:latest
     
 # verify stability
@@ -156,3 +159,5 @@ docker exec php.1.lkrg5g45mb3njmi180gupyknh  bin/console about | grep -B 1 -A 2 
 ## Changes
 
 0.1 - Baseline setup copied from php8-on-k8s, with Kubernetes stuff removed and Docker Swarm stuff for dev env added
+
+0.2 - Implementation using docker secrets and docker swarm

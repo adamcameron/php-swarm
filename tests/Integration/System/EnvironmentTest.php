@@ -2,8 +2,6 @@
 
 namespace App\Tests\Integration\System;
 
-use Generator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +29,7 @@ class EnvironmentTest extends TestCase
     }
 
     #[TestDox('Prohibited environment variables are not set')]
-    public function testProhibitedEnvironmentVariables()
+    public function testProhibitedEnvironmentVariables(): void
     {
         $varNames = [
             'APP_SECRET',

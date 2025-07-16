@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SymfonyTest extends TestCase
 {
     #[TestDox('It serves the home page')]
-    public function testIndexPage()
+    public function testIndexPage(): void
     {
         $client = new Client([
             'base_uri' => 'http://nginx/'
@@ -38,7 +38,7 @@ class SymfonyTest extends TestCase
     }
 
     #[TestDox('It can run the console in a shell')]
-    public function testSymfonyConsoleRuns()
+    public function testSymfonyConsoleRuns(): void
     {
         $appRootDir = dirname(__DIR__, 3);
 
